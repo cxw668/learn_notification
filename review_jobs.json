@@ -3,7 +3,7 @@
     {
       "name": "javabase-review",
       "enabled": true,
-      "dify_base_url": "https://your-dify-host/v1",
+      "dify_base_url": "https://api.dify.ai/v1",
       "api_key_env": "DIFY_API_KEY",
       "user_id": "review-bot-javabase",
       "learning_goal": "javabase",
