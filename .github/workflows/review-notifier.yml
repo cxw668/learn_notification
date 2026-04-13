@@ -1,0 +1,41 @@
+name: Review Notifier
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-review-notifier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run review notifier
+        env:
+          DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
+          QQ_EMAIL_CODE: ${{ secrets.QQ_EMAIL_CODE }}
+          REVIEW_TIMEZONE: Asia/Shanghai
+        run: python review_notifier.py
+
+      - name: Commit updated schedule
+        run: |
+          if git diff --quiet -- review_jobs.json; then
+            echo "No schedule changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add review_jobs.json
+          git commit -m "chore: update review schedule"
+          git push
