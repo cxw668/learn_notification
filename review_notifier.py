@@ -94,6 +94,24 @@ def normalize_text(value: Any, fallback: str = "") -> str:
     return text or fallback
 
 
+def resolve_dify_base_url(job: dict[str, Any]) -> str:
+    env_name = normalize_text(job.get("dify_base_url_env"))
+    if env_name:
+        env_value = normalize_text(os.environ.get(env_name))
+        if env_value:
+            return env_value.rstrip("/")
+
+    global_env_value = normalize_text(os.environ.get("DIFY_BASE_URL"))
+    if global_env_value:
+        return global_env_value.rstrip("/")
+
+    job_value = normalize_text(job.get("dify_base_url"))
+    if job_value:
+        return job_value.rstrip("/")
+
+    raise ValueError("未配置 Dify Base URL，请设置 DIFY_BASE_URL 或任务里的 dify_base_url")
+
+
 def ensure_state_entry(state: dict[str, Any], job_name: str) -> dict[str, Any]:
     jobs = state.setdefault("jobs", {})
     entry = jobs.setdefault(job_name, {})
@@ -143,7 +161,7 @@ def should_run(job: dict[str, Any], today: date) -> bool:
 
 
 def call_dify(job: dict[str, Any], today: date, state_entry: dict[str, Any]) -> dict[str, Any]:
-    base_url = str(job["dify_base_url"]).rstrip("/")
+    base_url = resolve_dify_base_url(job)
     api_key = resolve_secret(job, "api_key", "api_key_env")
     email_code = resolve_secret(job, "email_code", "email_code_env")
     user_agent = os.environ.get("DIFY_USER_AGENT", "review-notifier/1.0 (+https://github.com/actions)")

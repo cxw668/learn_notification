@@ -23,6 +23,7 @@ jobs:
 
       - name: Run review notifier
         env:
+          DIFY_BASE_URL: ${{ secrets.DIFY_BASE_URL }}
           DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
           QQ_EMAIL_CODE: ${{ secrets.QQ_EMAIL_CODE }}
           REVIEW_TIMEZONE: Asia/Shanghai
