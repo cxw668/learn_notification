@@ -9,7 +9,7 @@
       "learning_goal": "javabase",
       "review_prompt_template": "你是一个复习提醒助手。用户当前的学习目标是：{learning_goal}。今天到了定期复习时间，请直接输出一份复习清单。要求：仅输出无序列表；不要写解释；优先复习基础语法、面向对象、集合框架、异常处理和 IO。",
       "email_address": "2070873373@qq.com",
-      "email_code_env": "krytmpvjtlkgdeda",
+      "email_code_env": "QQ_EMAIL_CODE",
       "interval_days": 3,
       "next_review_date": "2026-04-16"
     }
