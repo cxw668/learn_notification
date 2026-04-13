@@ -91,6 +91,7 @@ def call_dify(job: dict[str, Any]) -> dict[str, Any]:
     base_url = str(job["dify_base_url"]).rstrip("/")
     api_key = resolve_secret(job, "api_key", "api_key_env")
     email_code = resolve_secret(job, "email_code", "email_code_env")
+    user_agent = os.environ.get("DIFY_USER_AGENT", "review-notifier/1.0 (+https://github.com/actions)")
 
     inputs = {
         "learning_goal": build_learning_goal(job),
@@ -114,6 +115,8 @@ def call_dify(job: dict[str, Any]) -> dict[str, Any]:
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": user_agent,
         },
         method="POST",
     )
@@ -123,7 +126,9 @@ def call_dify(job: dict[str, Any]) -> dict[str, Any]:
             body = response.read().decode("utf-8")
     except error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Dify API 请求失败，HTTP {exc.code}: {detail}") from exc
+        raise RuntimeError(
+            f"Dify API 请求失败，HTTP {exc.code}，URL={base_url}/workflows/run，响应={detail}"
+        ) from exc
     except error.URLError as exc:
         raise RuntimeError(f"无法连接到 Dify: {exc.reason}") from exc
 
