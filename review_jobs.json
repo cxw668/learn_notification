@@ -11,7 +11,13 @@
       "email_address": "2070873373@qq.com",
       "email_code_env": "QQ_EMAIL_CODE",
       "interval_days": 3,
-      "next_review_date": "2026-04-13"
+      "next_review_date": "2026-04-16",
+      "last_sent_date": "2026-04-13",
+      "last_result": {
+        "workflow_run_id": "8d3d3a0d-144d-47fe-9e23-299b8c2d18b0",
+        "status": "succeeded",
+        "updated_at": "2026-04-13T05:27:58"
+      }
     }
   ]
 }
