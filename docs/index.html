@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学习助手控制台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="backdrop backdrop-a"></div>
+  <div class="backdrop backdrop-b"></div>
+
+  <main class="shell">
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">GitHub Pages</p>
+        <h1>学习助手控制台</h1>
+        <p class="hero-copy">
+          直接在网页里维护学习目标、复习频率和学习进度。页面会读写仓库里的
+          review_jobs.json、review_state.json 和 review_history.md，GitHub Action 继续负责定时发送复习邮件。
+        </p>
+      </div>
+      <div class="hero-side">
+        <div class="stat-pill">
+          <span>模式</span>
+          <strong>静态前端 + GitHub API</strong>
+        </div>
+        <div class="stat-pill warning-pill">
+            <span>权限建议</span>
+            <strong>建议对当前仓库使用 Fine-grained PAT 并直接开到最大可用权限</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid two-up">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">连接仓库</p>
+            <h2>GitHub 连接</h2>
+          </div>
+        </div>
+
+        <form id="connection-form" class="form-grid">
+          <label>
+            <span>仓库所有者</span>
+            <input id="owner" type="text" placeholder="your-github-name" />
+          </label>
+          <label>
+            <span>仓库名</span>
+            <input id="repo" type="text" placeholder="hr-chaflow" />
+          </label>
+          <label>
+            <span>分支</span>
+            <input id="branch" type="text" placeholder="main" value="main" />
+          </label>
+          <label class="wide">
+            <span>GitHub Token</span>
+            <input id="token" type="password" placeholder="github_pat_..." />
+          </label>
+          <label class="checkbox-row wide">
+            <input id="remember-token" type="checkbox" />
+            <span>仅在当前浏览器保存连接信息</span>
+          </label>
+        </form>
+
+        <div class="button-row">
+          <button id="load-button" class="primary">读取仓库数据</button>
+          <button id="save-button">保存到仓库</button>
+          <button id="dispatch-button">立即触发复习</button>
+          <button id="clear-button" class="ghost">清除本地连接信息</button>
+        </div>
+
+        <div class="note-block">
+          <p>如果你追求最低维护成本，最省事的做法是：</p>
+          <ul>
+            <li>Fine-grained PAT 只绑定当前仓库</li>
+            <li>Repository permissions 直接开到当前仓库可用的最大权限</li>
+            <li>至少确保 Contents 和 Actions 是 Read and write，Metadata 是 Read only</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head compact">
+          <div>
+            <p class="eyebrow">共享配置</p>
+            <h2>全局默认值</h2>
+          </div>
+        </div>
+
+        <form id="defaults-form" class="form-grid">
+          <label>
+            <span>Dify Base URL</span>
+            <input id="default-dify-base-url" type="text" placeholder="https://api.dify.ai/v1" />
+          </label>
+          <label>
+            <span>API Key 环境变量名</span>
+            <input id="default-api-key-env" type="text" placeholder="DIFY_API_KEY" />
+          </label>
+          <label>
+            <span>邮箱授权码环境变量名</span>
+            <input id="default-email-code-env" type="text" placeholder="QQ_EMAIL_CODE" />
+          </label>
+          <label>
+            <span>默认收件邮箱</span>
+            <input id="default-email-address" type="email" placeholder="name@example.com" />
+          </label>
+          <label>
+            <span>内容输出字段</span>
+            <input id="default-content-output-key" type="text" placeholder="content" />
+          </label>
+          <label>
+            <span>历史保留条数</span>
+            <input id="default-history-limit" type="number" min="1" value="20" />
+          </label>
+        </form>
+
+        <div class="stats-grid" id="summary-cards">
+          <article class="metric-card">
+            <span>学习任务</span>
+            <strong id="metric-total">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>启用任务</span>
+            <strong id="metric-enabled">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>最近待复习</span>
+            <strong id="metric-next-date">-</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid content-grid">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">任务管理</p>
+            <h2>学习目标</h2>
+          </div>
+          <button id="add-task-button" class="primary">添加学习任务</button>
+        </div>
+
+        <div id="task-list" class="task-list"></div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">在线历史</p>
+              <h2>复习记录</h2>
+            </div>
+          </div>
+          <div id="history-list" class="history-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">运行反馈</p>
+              <h2>状态</h2>
+            </div>
+          </div>
+          <pre id="status-log" class="status-log">等待连接仓库...</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="task-template">
+    <article class="task-card">
+      <div class="task-top">
+        <div>
+          <p class="task-badge">学习任务</p>
+          <h3 class="task-title">未命名任务</h3>
+        </div>
+        <div class="task-actions">
+          <label class="checkbox-row compact-row">
+            <input data-field="enabled" type="checkbox" />
+            <span>启用</span>
+          </label>
+          <button data-action="remove" class="ghost danger">删除</button>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>任务标识 name</span>
+          <input data-field="name" type="text" placeholder="java-review" />
+        </label>
+        <label>
+          <span>user_id</span>
+          <input data-field="user_id" type="text" placeholder="review-bot-java" />
+        </label>
+        <label class="wide">
+          <span>学习目标</span>
+          <input data-field="learning_goal" type="text" placeholder="javabase" />
+        </label>
+        <label>
+          <span>收件邮箱</span>
+          <input data-field="email_address" type="email" placeholder="name@example.com" />
+        </label>
+        <label>
+          <span>复习间隔天数</span>
+          <input data-field="interval_days" type="number" min="1" value="3" />
+        </label>
+        <label>
+          <span>下次复习日期</span>
+          <input data-field="next_review_date" type="date" />
+        </label>
+        <label class="wide">
+          <span>邮件标题模板</span>
+          <input data-field="email_subject_template" type="text" placeholder="{learning_goal} 复习提醒" />
+        </label>
+        <label class="wide">
+          <span>当前学习进度</span>
+          <textarea data-field="learning_progress" rows="3" placeholder="例如：已学完类和对象，准备开始集合框架"></textarea>
+        </label>
+        <label class="wide">
+          <span>复习提示词模板</span>
+          <textarea data-field="review_prompt_template" rows="5"
+            placeholder="你是一个复习提醒助手...">你是一个复习提醒助手。当前学习目标是：{learning_goal}。今天到了定期复习时间，请结合上一次复习内容和当前学习进度，直接输出一份新的复习清单。要求：仅输出无序列表；不要写解释；优先补强薄弱点。上一次复习内容：{previous_review_content}。当前学习进度：{learning_progress}。</textarea>
+        </label>
+      </div>
+    </article>
+  </template>
+
+  <script src="./app.js" type="module"></script>
+</body>
+
+</html>
