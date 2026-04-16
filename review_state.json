@@ -2,11 +2,18 @@
   "jobs": {
     "javabase-review": {
       "learning_progress": "",
-      "last_sent_date": "",
-      "last_email_subject": "",
-      "last_review_content": "",
-      "review_count": 0,
-      "history": []
+      "last_sent_date": "2026-04-16",
+      "last_email_subject": "javabase 复习提醒",
+      "last_review_content": "- 理解 Java 编程语言的核心概念与语法基础\n- 掌握面向对象编程的四大特性：封装、继承、多态与抽象\n- 熟练使用 JDK8 手写单例模式、工厂模式等基础设计模式\n- 深入理解 Java 集合框架，特别是 List、Map 及内部原理\n- 掌握多线程编程基础，理解线程生命周期与常见同步方式\n- 熟悉 JVM 内存模型，包括堆、栈、方法区的基本划分\n- 了解异常处理机制，掌握常用运行时异常与检查型异常的区分\n- 理解 IO 流与 NIO 的基本概念及常用类的使用",
+      "review_count": 1,
+      "history": [
+        {
+          "sent_at": "2026-04-16",
+          "subject": "javabase 复习提醒",
+          "content": "- 理解 Java 编程语言的核心概念与语法基础\n- 掌握面向对象编程的四大特性：封装、继承、多态与抽象\n- 熟练使用 JDK8 手写单例模式、工厂模式等基础设计模式\n- 深入理解 Java 集合框架，特别是 List、Map 及内部原理\n- 掌握多线程编程基础，理解线程生命周期与常见同步方式\n- 熟悉 JVM 内存模型，包括堆、栈、方法区的基本划分\n- 了解异常处理机制，掌握常用运行时异常与检查型异常的区分\n- 理解 IO 流与 NIO 的基本概念及常用类的使用",
+          "workflow_run_id": "a0f45309-dabf-46dc-a702-fb9c521fe765"
+        }
+      ]
     }
   }
 }
