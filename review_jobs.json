@@ -14,12 +14,12 @@
       "content_output_key": "content",
       "history_limit": 20,
       "interval_days": 3,
-      "next_review_date": "2026-04-22",
-      "last_sent_date": "2026-04-19",
+      "next_review_date": "2026-04-25",
+      "last_sent_date": "2026-04-22",
       "last_result": {
-        "workflow_run_id": "0349a905-1ddf-4a30-9bc0-120e54362a31",
+        "workflow_run_id": "684fd97f-57ba-432b-a625-a4abf74fbbae",
         "status": "succeeded",
-        "updated_at": "2026-04-19T04:15:32"
+        "updated_at": "2026-04-22T04:09:18"
       }
     }
   ]
